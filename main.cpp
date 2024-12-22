@@ -15,6 +15,7 @@ std::vector<unsigned char> read_file(const std::string& filename)
 
     return {(std::istreambuf_iterator(file)), std::istreambuf_iterator<char>()};
 }
+//TODO: comparing hex values to hex instructions while looping
 void hex_dump(const std::vector<unsigned char>& data) {
     std::cout << "Hex Dump of File Content:\n";
     for (size_t i = 0;i < data.size();++i) {
