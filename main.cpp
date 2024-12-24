@@ -17,8 +17,7 @@ std::vector<unsigned char> read_file(const std::string& filename)
     return {std::istreambuf_iterator(file), std::istreambuf_iterator<char>()};
 }
 
-void highlight_hex(const std::string& text, const std::string& highlight = "\033[1;31m",
-                   const std::string& reset = "\033[0m")
+void highlight_hex(const std::string& text, const std::string& highlight = "\033[1;31m", const std::string& reset = "\033[0m")
 {
     std::cout << highlight << text << reset;
 }
@@ -75,27 +74,13 @@ std::string interpret_ascii(const unsigned char c)
     }
 }
 
-void hex_dump_with_ascii(const std::vector<unsigned char>& data, const std::vector<std::string>& highlights)
+void hex_dump_with_ascii(const std::vector<unsigned char>& data)
 {
     for (size_t i = 0; i < data.size(); ++i)
     {
         std::ostringstream hex_byte;
         std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
-        bool is_highlighted = false;
-        for (const auto& highlight : highlights)
-        {
-            if (hex_byte.str() == highlight)
-            {
-                highlight_hex(hex_byte.str());
-                is_highlighted = true;
-                break;
-            }
-        }
-        if (!is_highlighted)
-        {
-            std::cout << hex_byte.str() << " ";
-        }
-
+        std::cout << hex_byte.str() << " ";
         if ((i + 1) % 16 == 0 || i == data.size() - i)
         {
             const size_t padding = 16 - (i % 16) - 1;
@@ -118,9 +103,7 @@ void hex_dump_with_ascii(const std::vector<unsigned char>& data, const std::vect
     std::cout << std::endl;
 }
 
-
-void annotate_with_context(const std::vector<unsigned char>& data, const std::string& description, size_t offset,
-                           size_t context_size = 16)
+void annotate_with_context(const std::vector<unsigned char>& data, const std::string& description, size_t offset, size_t context_size = 16)
 {
     if (offset >= data.size())
     {
@@ -153,8 +136,7 @@ void annotate_with_context(const std::vector<unsigned char>& data, const std::st
     std::cout << std::endl;
 }
 
-std::pair<bool, size_t> patch_test_instruction(std::vector<unsigned char>& data, size_t start_offset,
-                            const std::vector<unsigned char>& pattern)
+std::pair<bool, size_t> patch_test_instruction(std::vector<unsigned char>& data, size_t start_offset, const std::vector<unsigned char>& pattern)
 {
     for (size_t i = start_offset; i <= data.size() - pattern.size(); ++i)
     {
@@ -287,8 +269,7 @@ int main()
     {
     case 1:
         {
-            const std::vector<std::string> highlights = {"85", "C0", "90"};
-            hex_dump_with_ascii(content, highlights);
+            hex_dump_with_ascii(content);
             break;
         }
     case 2:
